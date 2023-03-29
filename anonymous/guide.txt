@@ -1,0 +1,149 @@
+가상환경 만들기
+command > python -m venv venv
+>> 가상환경 만든 이유 : 버전관리
+
+Scripts >> activate 파일로 실행됨
+
+(venv) >> 가상환경을 사용하겠다는 의미
+
+가상환경 종료 >> deactivate 입력
+
+2. 자동으로 가상환경 접근할 수 있도록 셋팅하기
+
+- f1 키 누르기 
+    >> select interpreter
+    >> + Enter interpreter path 누름
+    >> Find >> 가상환경의 Scripts > python.exe 클릭
+    
+3. requirements.txt 파일 만들기
+            django == 3.2.4
+            psycopg2
+입력하기
+
+command > pip install -r ./requirements.txt 
+
+4. 현재 경로에 프로젝트 만들기(익명게시판 생성)
+command > jdango-admin startproject anonymous .
+
+5. 장고 서버 운용
+command > python manage.py runserver 8000
+
+6. 데이터베이스와 연동
+anonymous > settings.py에 DATABASES 검색
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'anonymous',
+        'USER' : 'postgres',
+        'PASSWORD' : '0000',
+        'HOST' : 'localhost',
+        'PORT' : '5432' 
+    }
+}
+
+로 바꿔주기
+
+7. DBeaver 들어가기
+
+데이터베이스 > 새 데이터베이스 > postgresql 연동
+
+PASSWORD : 0000 입력
+
+Databases > 우클릭 > create new databases > anonymous
+
+8. 자동으로 DDL 작성 >> 기본 migrations 파일 생성
+command > python manage.py migrate
+
+9. DBeaver 가서 생성여부 확인
+- Tables 가서 F5 눌러서 확인
+
+10. app 생성 및 구성
+>> user app 생성 : command > python manage.py startapp user
+>> board app 생성 : command > python manage.py startapp board
+
+>> user app 구성 : user폴더 > models.py 작성하기 > anonymous 폴더 settings.py에 installed 검색 
+                  > installed_apps에 'user', 'board' 추가
+                  > 그 밑에 AUTH_USER_MODEL = 'user.User' 추가
+
+>> 마이그레이션 파일 생성
+command > python manage.py makemigrations
+    >> user로 가서 migration 파일 생성 확인
+        -user폴더 migrations폴더 0011_initial.py 자동생성 된거 확인
+
+>> DBeaver로 가서 Tables에 모든 데이터 지우기
+   (shift 전체 선택, 우클릭 삭제, cascade delete 체크)
+   command > python manage.py migrate
+
+>> DBeaver > Tables에 새로운 내용 생성 확인 (F5)
+
+>> board app 구성 (게시판 board 모델 만들기)
+
+board 폴더 models.py 작성
+>> 글작성(post) , 댓글(comment) class 작성
+>> 마이그레이션 파일 생성
+    command > python manage.py makemigrations
+>> 생성 후, 마이그레이트
+    command > python manage.py migrate
+
+11. templates 폴더 만들기
+
+12. anonymous > settings.py 에서 ctrl+f 해서 templates 찾기
+    DIRS에 'templates' 넣기
+
+13. templates에 index.html 만들기
+
+14. board > views.py 작성하기
+
+15. anonymous > urls.py 작성하기
+
+16 templates에 common, page 폴더 만들기
+    common안에 base.html 만들고 index.html를 page폴더로 옮기기
+    index.html 안에 있는 내용 base.html로 복붙
+
+17 base.html 내용 수정하고 index.html 다지우고 새로운 내용 다시작성
+
+18. board > views.py 에서 경로 수정해주기
+
+19. templates 안에 component 폴더 만들기
+    그안에 nav.html 만들어서 작성하기
+
+20. login 페이지 만들기
+    templates > page > signin.thml 파일 만들고 작성하기
+    user > views.py 작성하기
+    urls.py 작성하기
+    bootstrap > docks > search에 CDN via jsDelivr 검색
+    위에꺼 복사해서 base.html head태그 부분에 붙여넣기
+
+[bootstrap]
+1.container
+화면에 보이는 HTML을 감싸고 있는 친구
+
+2. ROW 한 행
+3. COL 한 열
+
+21. html 파일 작성하면서 꾸미기
+
+
+22. page 폴더에 signup.html 파일 만들고 작성하기
+<a href=''> 회원 가입 </a>
+
+fs : font size
+text-decoration-none : 데코레이션 주지마
+m : margin
+
+23. anonymous > urls.py 작성하기(signup 추가)
+
+24. user > views.py signup함수 정의하기
+
+#########################
+값을 읽고 싶을 때
+GET - URL PARAMETER (HTTP://.......?title=...)
+
+값을 지우고 싶을 때 DELETE
+값을 수정하고 싶을 때 PUT
+값을 생성하고 싶을 때 POST
+
+# post 방식으로 username, password 받아서 로그인
+
+# csrf_token : form태그 아래 삽입 > 위변조 방지

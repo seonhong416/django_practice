@@ -1,0 +1,58 @@
+{% extends 'common/base.html' %}
+{% comment %} 에서 base.thml(경로)을 사용하겠다는 의미 {% endcomment %}
+
+{% block content %}
+
+
+    <div class='row'>
+
+        {% for post in post_set %}
+        <div class='col-6 p-2'>
+            <div class='card'>
+                <div class='card-body'>
+                    <h5>{{post.title}}</h5>
+                    <p>{{post.content}}</p>
+                    <p>{{post.user.nickname}}<small>{{post.reg_date|date:'Y-m-d'}}</small></p>
+                    <p>{{post.comment_set.all.count}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+
+    <div class='row mt-4'>
+        <div class='col-4 text-start'>
+            {% if post_set.has_previous %}
+            <a class='text-decoration-none fs-5'
+            style='font-weight:bold; color:black;'
+            href={% url 'board' %}?page={{post_set.previous_page_number}}
+            > 이전 글 </a>
+            {% endif %}
+        </div>
+
+        <div class='col-4 text-center'>
+            <a class='text-decoration-none fs-5'
+            style='font-weight:bold; color:black;'
+            > {{post_set.number}}/{{post_set.paginator.num_pages}}</a>
+        </div>
+
+        <div class='col-4 text-end'>
+            {% if post_set.has_next %}
+            <a class='text-decoration-none fs-5'
+            style='font-weight:bold; color:black;'
+            href={% url 'board' %}?page={{post_set.next_page_number}}
+            > 다음 글 </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% comment %} 
+
+{% block content %}
+안녕하세요
+{% endblock %}
+앞으로 base.html 사용하는데
+content 라는 block 부분에 어떠한 내용물을 담을거야
+
+{% endcomment %}
