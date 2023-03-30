@@ -3,6 +3,16 @@
 
 {% block content %}
 
+    <div class='row'>
+        <div class='col'>
+            <form method='get'>
+                <div class='input-group'>
+                    <input type="text" class='form-control' name='search_text' value='{{search_text}}'>
+                    <button type='submit' class='btn btn-outline-secondary'>검색</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class='row'>
 
@@ -26,7 +36,7 @@
             {% if post_set.has_previous %}
             <a class='text-decoration-none fs-5'
             style='font-weight:bold; color:black;'
-            href={% url 'board' %}?page={{post_set.previous_page_number}}
+            href={% url 'board' %}?page={{post_set.previous_page_number}}&search_text={{search_text}}
             > 이전 글 </a>
             {% endif %}
         </div>
@@ -41,7 +51,7 @@
             {% if post_set.has_next %}
             <a class='text-decoration-none fs-5'
             style='font-weight:bold; color:black;'
-            href={% url 'board' %}?page={{post_set.next_page_number}}
+            href={% url 'board' %}?page={{post_set.next_page_number}}&search_text={{search_text}}
             > 다음 글 </a>
             {% endif %}
         </div>
